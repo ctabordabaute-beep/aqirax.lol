@@ -1,1 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqirax</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&family=Cherry+Bomb+One&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0c12;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --text-primary: #f2f5fc;
+            --text-secondary: #b0b8d0;
+            --discord-blurple: #5865F2;
+            --red-owner: #ff4d4d;
+            --blue-admin: #4da6ff;
+            --green-helper: #5fd15f;
+            --accent-aqirax: #00d4ff;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-primary);
+            padding: 1rem;
+        }
+
+        .audiowide-regular {
+            font-family: "Audiowide", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            background: #000;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 20, 0.6);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .main-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 2rem;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+
+        .left-column {
+            flex: 1 1 500px;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 0.3rem;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .profile-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInUp 0.4s ease-out;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1.2rem;
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            min-width: 150px;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.small .avatar {
+            width: 55px;
+            height: 55px;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .card.small .profile-name {
+            font-size: 0.95rem;
+        }
+
+        .rank-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            width: fit-content;
+            margin-top: 0.1rem;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .rank-owner {
+            color: var(--red-owner);
+            background: rgba(255, 60, 60, 0.15);
+            border: 1px solid rgba(255, 60, 60, 0.4);
+        }
+
+        .rank-admin {
+            color: var(--blue-admin);
+            background: rgba(77, 166, 255, 0.15);
+            border: 1px solid rgba(77, 166, 255, 0.4);
+        }
+
+        .rank-helper {
+            color: var(--green-helper);
+            background: rgba(95, 209, 95, 0.15);
+            border: 1px solid rgba(95, 209, 95, 0.4);
+        }
+
+        .connector-vertical {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, #7a86b0, #4a5578);
+            margin: 0.2rem auto;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .connector-vertical::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7a86b0;
+        }
+
+        .horizontal-bridge {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 18px;
+            width: 100%;
+            position: relative;
+            margin: 0.2rem 0;
+        }
+
+        .horizontal-bridge::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 22%;
+            right: 22%;
+            height: 2px;
+            background: #7a86b0;
+            border-radius: 2px;
+            transform: translateY(-50%);
+        }
+
+        .helpers-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-top: 0.2rem;
+        }
+
+        .child-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .child-item::before {
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            width: 2px;
+            height: 16px;
+            background: #7a86b0;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .join-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 0.8rem 2.4rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3);
+            margin-top: 1rem;
+            align-self: center;
+        }
+
+        .join-btn i {
+            font-size: 1.5rem;
+            color: #000000;
+        }
+
+        .join-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Columna derecha */
+        .right-column {
+            flex: 0 0 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding-top: 0.5rem;
+            margin-top: 5rem;
+            margin-left: 2rem;
+        }
+
+        .logo-img {
+            width: 190px;
+            height: 190px;
+            object-fit: contain;
+            background: transparent;
+            border-radius: 12px;
+            transition: var(--transition);
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+            align-self: flex-start;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.04);
+            filter: drop-shadow(0 12px 28px rgba(0, 212, 255, 0.3));
+        }
+
+        .oops-text {
+            font-family: "Audiowide", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 2.8rem;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+            text-align: left;
+            text-shadow: none;
+            margin-top: 0.5rem;
+            align-self: flex-start;
+        }
+
+        .info-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: left;
+            line-height: 1.4;
+            letter-spacing: 0.02em;
+            align-self: flex-start;
+        }
+
+        .links-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            align-items: flex-start;
+            margin-top: 0.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .links-text a {
+            color: #b0d4ff;
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .links-text a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 750px) {
+            .main-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.2rem;
+            }
+
+            .left-column {
+                max-width: 100%;
+                align-items: flex-start;
+            }
+
+            .tree-container {
+                align-items: center;
+            }
+
+            .helpers-row {
+                gap: 1.5rem;
+            }
+
+            .right-column {
+                flex: 0 0 auto;
+                width: 100%;
+                align-items: flex-start;
+                margin-top: 2rem;
+                margin-left: 0;
+            }
+
+            .logo-img {
+                width: 160px;
+                height: 160px;
+                align-self: flex-start;
+            }
+
+            .oops-text {
+                font-size: 2.2rem;
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="bg.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <div class="main-wrapper">
+        <div class="left-column">
+            <div class="tree-container">
+                <div class="profile-node">
+                    <div class="card">
+                        <img class="avatar"
+                            src="https://cdn.discordapp.com/guilds/1543361670565466183/users/1373716141297504428/avatars/ea7fd5d8546b348f32f289732711f0e1.png?size=512"
+                            alt="Overkill">
+                        <span class="profile-name">Overkill</span>
+                        <span class="rank-badge rank-owner">Owner</span>
+                    </div>
+                </div>
+
+                <div class="connector-vertical"></div>
+
+                <div class="profile-node">
+                    <div class="card">
+                        <img class="avatar"
+                            src="https://cdn.discordapp.com/avatars/1500082166938468513/4a2140aad0b883a875884129a7f1cfa0.png?size=512"
+                            alt="Sqyr">
+                        <span class="profile-name">Sqyr</span>
+                        <span class="rank-badge rank-admin">Administrador General</span>
+                    </div>
+                </div>
+
+                <div class="connector-vertical"></div>
+                <div class="horizontal-bridge"></div>
+
+                <div class="helpers-row">
+                    <div class="child-item">
+                        <div class="card small">
+                            <img class="avatar"
+                                src="https://cdn.discordapp.com/avatars/1530401628107046923/a_3cc22fd17e2f61559b612c7ea1ac8b0e.webp?size=512&animated=true"
+                                alt="Sbliw">
+                            <span class="profile-name">Sbliw</span>
+                            <span class="rank-badge rank-helper">Helper</span>
+                        </div>
+                    </div>
+                    <div class="child-item">
+                        <div class="card small">
+                            <img class="avatar"
+                                src="https://cdn.discordapp.com/avatars/990677537199902750/2995a4d1178bd6c9498883f2e07e0caf.png?size=512"
+                                alt="ezploo">
+                            <span class="profile-name">ezploo</span>
+                            <span class="rank-badge rank-helper">Helper</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://discord.gg/Gnht7ntVRr" target="_blank" rel="noopener noreferrer" class="join-btn">
+                <i class="fab fa-discord"></i> Unir Al Discord
+            </a>
+        </div>
+
+        <div class="right-column">
+            <img src="logo.png" alt="Aqirax Logo" class="logo-img">
+            <div class="oops-text">Oops...</div>
+            <div class="info-text">
+                Este Link no esta siendo usado para nada rn
+            </div>
+            <div class="links-text">
+                <a href="https://aqirax.com" target="_blank" rel="noopener">https://aqirax.com</a>
+                <a href="https://aqirax.net" target="_blank" rel="noopener">https://aqirax.net</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
